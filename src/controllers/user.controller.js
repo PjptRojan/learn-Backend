@@ -18,9 +18,9 @@ const registerUser = asyncHandler(async (req, res) => {
 
   //1. get user details from frontend
   const { fullName, email, username, password } = req.body;
-  console.log("email", email);
-  console.log("fullname", fullName);
-  console.log("password", password);
+  // console.log("email", email);
+  // console.log("fullname", fullName);
+  // console.log("password", password);
 
   // 2. validations - not empty
   if (
@@ -30,7 +30,7 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 
   // 3. check if user already exists: username, email
-  const existedUser = User.findOne({
+  const existedUser = await User.findOne({
     $or: [{ username }, { email }],
   });
 
@@ -40,7 +40,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
   // 4. check for images, check for avatar
   const avatarLocalPath = req.files?.avatar[0]?.path;
-  const coverImageLocalPath = req.files?.avatar[0]?.path;
+  const coverImageLocalPath = req.files?.coverImage[0]?.path;
 
   if (!avatarLocalPath) {
     throw new ApiError(400, "Avatar is required");
