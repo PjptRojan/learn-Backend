@@ -52,7 +52,7 @@ const userSchema = new mongoose.Schema(
 userSchema.pre("save", async function (next) {
   // this pre() method is taking two params the first is on which event you want to perform an operation and the second is the function to be executed. We cannot use the arrow function in this as the arrow function doesn't have reference of this keyword.
   if (!this.isModified("password")) return next(); // to make sure the password is encrypted only when it is added first time and after it is modified.
-  this.password = bcrypt.hash(this.password, 10); // bcrypt is used here to encrypt the password
+  this.password = await bcrypt.hash(this.password, 10); // bcrypt is used here to encrypt the password
   next();
 });
 
@@ -82,7 +82,7 @@ userSchema.methods.generateRefreshToken = function () {
       username: this.username,
       fullName: this.fullName,
     },
-    process.env.REFRESH_TOKEN_SECRET, 
+    process.env.REFRESH_TOKEN_SECRET,
     {
       expiresIn: process.env.REFRESH_TOKEN_EXPIRY,
     }
@@ -90,7 +90,3 @@ userSchema.methods.generateRefreshToken = function () {
 };
 
 export const User = mongoose.model("User", userSchema);
-
-
-
-
